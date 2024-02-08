@@ -1,39 +1,59 @@
-<script lang="ts" setup>
+<script setup>
+import { onMounted, reactive } from "vue";
 import { FormKit } from "@formkit/vue";
-import { useRouter } from 'vue-router';
-// import axios from '../lib/axios';
+import { useRouter, useRoute } from "vue-router";
 import ClienteService from "../services/ClienteService";
 import Heading from "@/components/UI/Heading.vue";
 import RouterLink from "@/components/UI/RouterLink.vue";
 
-const router = useRouter()
-
+const router = useRouter();
+const route = useRoute();
+const { id } = route.params;
 // console.log(router);
+console.log(id);
+
+const formData = reactive({
+  nombre: "",
+  apellido: "",
+  email: "",
+  telefono: "",
+  empresa: "",
+  puesto: "",
+});
+
+onMounted(() => {
+  ClienteService.obtenerCliente(id)
+    .then(({ data }) => {
+      formData.nombre = data.nombre;
+      formData.apellido = data.apellido;
+      formData.email = data.email;
+      formData.telefono = data.telefono;
+      formData.empresa = data.empresa;
+      formData.puesto = data.puesto;
+    })
+    .catch((error) => console.log(error));
+});
 
 const handleSubmit = (data) => {
-  data.estado = 1
-  // axios.post('/clientes', data)
-  ClienteService.agregarCliente(data)
-  .then(respuesta => {
-    console.log(respuesta)
-    //Redireccionar
-    router.push('/')
-  })
+  ClienteService.actualizarCliente(id, data)
+  .then(()=> router.push({ name: 'inicio' }))
   .catch(error => console.log(error))
-}
-
+};
 </script>
 <template>
-  <Heading>Agregar Cliente</Heading>
+  <Heading>Editar Cliente</Heading>
   <div class="flex justify-end">
     <RouterLink to="inicio">Volver</RouterLink>
   </div>
   <div class="mx-auto mt-10 bg-white shadow">
     <div class="mx-auto md:w-2/3 py-20 px-6">
-      <FormKit type="form"
-        submit-label="Agregar Cliente"
+      <FormKit
+        type="form"
+        submit-label="Guardar Cambios"
         incomplete-message="No se pudo enviar, revisa los mensajes"
-        @submit="handleSubmit">
+        @submit="handleSubmit"
+        :value="formData"
+      >
         <FormKit
           type="text"
           label="Nombre"
@@ -43,6 +63,7 @@ const handleSubmit = (data) => {
           :validation-messages="{
             required: 'El nombre del Cliente es Obligatorio',
           }"
+          v-model="formData.nombre"
         />
         <FormKit
           type="text"
@@ -53,6 +74,7 @@ const handleSubmit = (data) => {
           :validation-messages="{
             required: 'El Apellido del Cliente es Obligatorio',
           }"
+          v-model="formData.apellido"
         />
         <FormKit
           type="email"
@@ -62,8 +84,9 @@ const handleSubmit = (data) => {
           validation="required|email"
           :validation-messages="{
             required: 'El Email del Cliente es Obligatorio',
-            email: 'Ingresa un email válido'
+            email: 'Ingresa un email válido',
           }"
+          v-model="formData.email"
         />
         <FormKit
           type="text"
@@ -71,19 +94,22 @@ const handleSubmit = (data) => {
           name="telefono"
           placeholder="Teléfono: XXX-XXX-XXXX"
           validation="?matches:/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"
-          :validation-messages="{maches:'El formato no es válido'}"
+          :validation-messages="{ maches: 'El formato no es válido' }"
+          v-model="formData.telefono"
         />
         <FormKit
           type="text"
           label="Empresa"
           name="empresa"
           placeholder="Empresa de cliente"
+          v-model="formData.empresa"
         />
         <FormKit
           type="text"
           label="Puesto"
           name="puesto"
           placeholder="Puesto de cliente"
+          v-model="formData.puesto"
         />
       </FormKit>
     </div>
@@ -91,6 +117,6 @@ const handleSubmit = (data) => {
 </template>
 <style>
 .formkit-wrapper {
-    max-width: 100%;
+  max-width: 100%;
 }
 </style>

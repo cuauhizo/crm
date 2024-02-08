@@ -1,0 +1,44 @@
+{
+  "clientes": [
+    {
+      "id": "0235",
+      "nombre": "Fabian",
+      "apellido": "Rodriguez Cuauhizo Y",
+      "email": "cuauhizo@yahoo.com",
+      "telefono": "553-644-9573",
+      "empresa": "RARL820619",
+      "puesto": "Frontend",
+      "estado": true
+    },
+    {
+      "id": "0ca3",
+      "nombre": "Nayeli",
+      "apellido": "Canchola Garcia",
+      "email": "naye@gmail.com",
+      "telefono": "459-489-5499",
+      "empresa": "IMEM",
+      "puesto": "Licenciada",
+      "estado": false
+    },
+    {
+      "id": "f468",
+      "nombre": "Sofia",
+      "apellido": "Rodriguez Canchola",
+      "email": "sofi@gmail.com",
+      "telefono": "123-456-7896",
+      "empresa": "Cuauhizos",
+      "puesto": "Contadora",
+      "estado": true
+    },
+    {
+      "id": "1bc4",
+      "nombre": "Regina",
+      "apellido": "Rodriguez Canchola",
+      "email": "regina@gmail.com",
+      "telefono": "234-578-3644",
+      "empresa": "Cuauhizos",
+      "puesto": "Diseñadora",
+      "estado": false
+    }
+  ]
+}
